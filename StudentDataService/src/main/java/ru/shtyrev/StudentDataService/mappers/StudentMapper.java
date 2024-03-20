@@ -1,21 +1,31 @@
 package ru.shtyrev.StudentDataService.mappers;
 
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 import ru.shtyrev.StudentDataService.entities.*;
 import ru.shtyrev.StudentEntityService.dtos.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
-public interface StudentMapper {
-    StudentMapper INSTANCE = Mappers.getMapper(StudentMapper.class);
+public abstract class StudentMapper {
+    public static StudentMapper INSTANCE = Mappers.getMapper(StudentMapper.class);
 
-    StudentDTO studentToStudentDTO(Student student);
+    public abstract StudentDTO studentToStudentDTO(Student student);
 
-    MarkDTO markToMarkDTO(Mark mark);
+    @AfterMapping
+    protected void setEmptyList(@MappingTarget StudentDTO studentDTO) {
+        if (studentDTO.getMarks() == null) {
+            studentDTO.setMarks(new ArrayList<>());
+        }
+    }
 
-    List<MarkDTO> marksToMarkDTOs(List<Mark> marks);
+    public abstract MarkDTO markToMarkDTO(Mark mark);
 
-    Student studentDTOToStudent(StudentDTO studentDTO);
+    public abstract List<MarkDTO> marksToMarkDTOs(List<Mark> marks);
+
+    public abstract Student studentDTOToStudent(StudentDTO studentDTO);
 }

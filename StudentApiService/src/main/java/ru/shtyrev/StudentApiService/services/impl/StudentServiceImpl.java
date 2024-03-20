@@ -16,14 +16,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
     private final RestTemplate restTemplate;
-    private final String URL = "http://localhost:8080/students";
+    private final String URL = "http://localhost:8081/students";
 
     @Override
     public StudentDTO createStudent(StudentDTO studentDTO) {
         var request = new HttpEntity<>(studentDTO);
-        restTemplate.exchange(URL + "/add", HttpMethod.POST, request, StudentDTO.class);
-
-        return null;
+        return restTemplate.exchange(URL + "/add", HttpMethod.POST, request, StudentDTO.class).getBody();
     }
 
     @Override
